@@ -1,0 +1,65 @@
+{
+  "name": "awi-scan",
+  "version": "0.1.0",
+  "description": "Detect Agentic Workflow Injection risks in GitHub Actions workflows.",
+  "type": "module",
+  "license": "MIT",
+  "author": "awi-scan contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gnep18/awi-scan.git"
+  },
+  "homepage": "https://github.com/gnep18/awi-scan#readme",
+  "bugs": {
+    "url": "https://github.com/gnep18/awi-scan/issues"
+  },
+  "keywords": [
+    "github-actions",
+    "security",
+    "ai",
+    "agents",
+    "prompt-injection",
+    "sarif"
+  ],
+  "bin": {
+    "awi-scan": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "action.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "check": "npm run typecheck && npm run test && npm run build"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.1",
+    "commander": "^12.1.0",
+    "fast-glob": "^3.3.3",
+    "ignore": "^5.3.2",
+    "picocolors": "^1.1.1",
+    "yaml": "^2.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.10",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
