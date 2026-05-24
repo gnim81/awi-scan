@@ -18,6 +18,16 @@ describe("workflow discovery and parsing", () => {
     ]);
   });
 
+  it("does not add .github workflows when scanning a specific directory", async () => {
+    const root = await mkdtemp(join(tmpdir(), "awi-discovery-path-"));
+    await mkdir(join(root, ".github", "workflows"), { recursive: true });
+    await mkdir(join(root, "examples"), { recursive: true });
+    await writeFile(join(root, ".github", "workflows", "ci.yml"), "name: ci\non: push\njobs: {}\n");
+    await writeFile(join(root, "examples", "agent.yml"), "name: agent\non: issue_comment\njobs: {}\n");
+
+    await expect(discoverWorkflowFiles(root, ["examples"], defaultConfig)).resolves.toEqual([join(root, "examples", "agent.yml")]);
+  });
+
   it("parses jobs, steps, permissions, and triggers", async () => {
     const root = await mkdtemp(join(tmpdir(), "awi-parser-"));
     const file = join(root, "workflow.yml");

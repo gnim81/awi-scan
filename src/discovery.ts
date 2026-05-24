@@ -24,13 +24,16 @@ export async function discoverWorkflowFiles(root: string, paths: string[], confi
   });
 
   const direct = entries.filter((entry) => /\.ya?ml$/i.test(entry));
-  const workflowGlob = await fg([".github/workflows/**/*.{yml,yaml}"], {
-    cwd: root,
-    absolute: false,
-    dot: true,
-    onlyFiles: true,
-    unique: true
-  });
+  const shouldIncludeDefaultWorkflows = requested.length === 0 || requested.includes(".") || requested.includes("./");
+  const workflowGlob = shouldIncludeDefaultWorkflows
+    ? await fg([".github/workflows/**/*.{yml,yaml}"], {
+        cwd: root,
+        absolute: false,
+        dot: true,
+        onlyFiles: true,
+        unique: true
+      })
+    : [];
 
   return Array.from(new Set([...direct, ...workflowGlob]))
     .filter((entry) => !ig.ignores(entry))
