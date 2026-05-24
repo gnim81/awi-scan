@@ -76,3 +76,35 @@ export interface Workflow {
   env: Record<string, string>;
   jobs: WorkflowJob[];
 }
+
+export interface DetectedSource {
+  label: string;
+  value: string;
+  location: Location;
+  stepId?: string;
+  jobId?: string;
+}
+
+export interface DetectedSink {
+  label: string;
+  value: string;
+  location: Location;
+  stepId?: string;
+  jobId: string;
+}
+
+export interface DetectedPrivilege {
+  label: string;
+  value: string;
+  location: Location;
+  stepId?: string;
+  jobId?: string;
+}
+
+export interface SeverityInput {
+  hasCompleteFlow: boolean;
+  hasPullRequestTarget: boolean;
+  hasWritePermission: boolean;
+  hasSecrets: boolean;
+  hasSelfHostedRunner: boolean;
+}
