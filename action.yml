@@ -1,0 +1,26 @@
+name: awi-scan
+description: Detect Agentic Workflow Injection risks in GitHub Actions workflows.
+author: awi-scan contributors
+inputs:
+  paths:
+    description: Newline-separated paths to scan.
+    required: false
+    default: "."
+  format:
+    description: Output format: human, json, or sarif.
+    required: false
+    default: sarif
+  fail-on:
+    description: "Fail when findings reach this severity: low, medium, high, critical, or none."
+    required: false
+    default: high
+  output:
+    description: Report output path.
+    required: false
+    default: awi-scan.sarif
+outputs:
+  report:
+    description: Path to the generated report.
+runs:
+  using: node20
+  main: dist/action.js

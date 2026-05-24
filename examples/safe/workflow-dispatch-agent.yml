@@ -1,0 +1,16 @@
+name: safe manual agent
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: Trusted maintainer task
+        required: true
+permissions:
+  contents: read
+jobs:
+  agent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: anthropics/claude-code-action@v1
+        with:
+          prompt: ${{ inputs.task }}
