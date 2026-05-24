@@ -46,3 +46,33 @@ export interface ScanOptions {
   paths: string[];
   config: ScanConfig;
 }
+
+export interface WorkflowStep {
+  id?: string;
+  name?: string;
+  uses?: string;
+  run?: string;
+  shell?: string;
+  with: Record<string, string>;
+  env: Record<string, string>;
+  location: Location;
+}
+
+export interface WorkflowJob {
+  id: string;
+  name?: string;
+  runsOn: string[];
+  permissions: Record<string, string>;
+  env: Record<string, string>;
+  steps: WorkflowStep[];
+  location: Location;
+}
+
+export interface Workflow {
+  file: string;
+  name?: string;
+  triggers: string[];
+  permissions: Record<string, string>;
+  env: Record<string, string>;
+  jobs: WorkflowJob[];
+}
