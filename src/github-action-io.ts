@@ -1,3 +1,5 @@
+import { appendFileSync } from "node:fs";
+
 type Env = Record<string, string | undefined>;
 type Writer = (line: string) => void;
 
@@ -12,7 +14,16 @@ export function getMultilineInput(name: string, env: Env = process.env): string[
     .filter(Boolean);
 }
 
-export function setOutput(name: string, value: string, write: Writer = (line) => process.stdout.write(`${line}\n`)): void {
+export function setOutput(
+  name: string,
+  value: string,
+  write: Writer = (line) => process.stdout.write(`${line}\n`),
+  env: Env = process.env
+): void {
+  if (env.GITHUB_OUTPUT) {
+    appendFileSync(env.GITHUB_OUTPUT, `${name}=${value}\n`, "utf8");
+    return;
+  }
   write(`::set-output name=${escapeCommand(name)}::${escapeCommand(value)}`);
 }
 
