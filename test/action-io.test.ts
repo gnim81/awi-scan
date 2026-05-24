@@ -17,7 +17,7 @@ describe("github action io", () => {
 
   it("emits legacy GitHub output and failure commands when output file is unavailable", () => {
     const lines: string[] = [];
-    setOutput("report", "awi-scan.sarif", (line) => lines.push(line));
+    setOutput("report", "awi-scan.sarif", (line) => lines.push(line), {});
     setFailed("boom", (line) => lines.push(line));
 
     expect(lines).toEqual(["::set-output name=report::awi-scan.sarif", "::error::boom"]);
