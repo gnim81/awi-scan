@@ -11,4 +11,15 @@ describe("release assets", () => {
     const action = await readFile("dist/action.js", "utf8");
     expect(action).not.toMatch(/from "\.\/chunk-/);
   });
+
+  it("uses the actual GitHub repository owner in release metadata", async () => {
+    const files = await Promise.all([
+      readFile("README.md", "utf8"),
+      readFile("package.json", "utf8"),
+      readFile("src/reporters/sarif.ts", "utf8")
+    ]);
+
+    expect(files.join("\n")).toContain("vanesio/awi-scan");
+    expect(files.join("\n")).not.toContain("gnep18/awi-scan");
+  });
 });
