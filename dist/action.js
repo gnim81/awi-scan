@@ -469,7 +469,7 @@ function renderSarif(result) {
           tool: {
             driver: {
               name: "awi-scan",
-              informationUri: "https://github.com/vanesio/awi-scan",
+              informationUri: "https://github.com/gnim81/awi-scan",
               rules: ruleCatalog.map((rule) => ({
                 id: rule.id,
                 name: rule.title,

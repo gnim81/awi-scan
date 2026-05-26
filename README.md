@@ -1,12 +1,18 @@
 # awi-scan
 
+[![CI](https://github.com/gnim81/awi-scan/actions/workflows/ci.yml/badge.svg)](https://github.com/gnim81/awi-scan/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/gnim81/awi-scan)](https://github.com/gnim81/awi-scan/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Detect Agentic Workflow Injection risks in GitHub Actions workflows.
 
-Agentic Workflow Injection happens when untrusted GitHub text, such as a pull request body or issue comment, is sent to an AI coding agent that runs with repository privileges. `awi-scan` looks for that source-to-agent-to-privilege path.
+Agentic Workflow Injection happens when untrusted GitHub text, such as a pull request body or issue comment, is sent to an AI coding agent that runs with repository privileges. `awi-scan` looks for that source-to-agent-to-privilege path before the agent runs.
 
 ```bash
 npx awi-scan
 ```
+
+`awi-scan` runs locally and offline. It does not send workflow contents to an external service.
 
 ## Example Finding
 
@@ -56,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: vanesio/awi-scan@v0.1.0
+      - uses: gnim81/awi-scan@v0.1.0
         with:
           fail-on: high
 ```
@@ -80,6 +86,12 @@ npx awi-scan explain awi.untrusted-prompt-to-agent
 - Dangerous contexts such as `pull_request_target`, write permissions, secrets, OIDC, and self-hosted runners.
 
 See [Threat Model](docs/threat-model.md) and [Rules](docs/rules.md) for details.
+
+## Project
+
+- Security reports: [SECURITY.md](SECURITY.md)
+- Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Examples: [docs/examples.md](docs/examples.md)
 
 ## License
 

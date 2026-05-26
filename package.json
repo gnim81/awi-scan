@@ -7,11 +7,11 @@
   "author": "awi-scan contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vanesio/awi-scan.git"
+    "url": "https://github.com/gnim81/awi-scan.git"
   },
-  "homepage": "https://github.com/vanesio/awi-scan#readme",
+  "homepage": "https://github.com/gnim81/awi-scan#readme",
   "bugs": {
-    "url": "https://github.com/vanesio/awi-scan/issues"
+    "url": "https://github.com/gnim81/awi-scan/issues"
   },
   "keywords": [
     "github-actions",
@@ -33,7 +33,14 @@
   "files": [
     "dist",
     "action.yml",
+    "docs/configuration.md",
+    "docs/examples.md",
+    "docs/releasing.md",
+    "docs/rules.md",
+    "docs/threat-model.md",
     "README.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
     "LICENSE"
   ],
   "engines": {
