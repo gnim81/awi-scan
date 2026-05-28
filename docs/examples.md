@@ -7,11 +7,9 @@ Safe examples live in `examples/safe`.
 Run:
 
 ```bash
-npm install
-npm run build
-node dist/cli.js examples --format human --fail-on none
+npx awi-scan examples
 ```
 
-After npm publication, the same examples can be scanned with `npx awi-scan examples`.
+When working from a local clone, run `npm install`, `npm run build`, then `node dist/cli.js examples --format human --fail-on none`.
 
 The vulnerable examples intentionally combine untrusted event text, agent execution, and workflow privileges. Do not copy them into production workflows.

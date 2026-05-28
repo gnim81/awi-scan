@@ -65,9 +65,10 @@ describe("release assets", () => {
     const readme = await readFile("README.md", "utf8");
     const packageJson = JSON.parse(await readFile("package.json", "utf8")) as { version: string };
 
-    expect(packageJson.version).toBe("0.1.2");
-    expect(readme).toContain("gnim81/awi-scan@v0.1.2");
-    expect(readme).toContain("not yet published to npm");
+    expect(packageJson.version).toBe("0.1.3");
+    expect(readme).toContain("gnim81/awi-scan@v0.1.3");
+    expect(readme).toContain("npx awi-scan --format human");
+    expect(readme).not.toContain("not yet published to npm");
   });
 
   it("uses npm-normalized package metadata for publishing", async () => {

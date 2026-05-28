@@ -1,6 +1,7 @@
 # awi-scan
 
 [![CI](https://github.com/gnim81/awi-scan/actions/workflows/ci.yml/badge.svg)](https://github.com/gnim81/awi-scan/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/awi-scan)](https://www.npmjs.com/package/awi-scan)
 [![Release](https://img.shields.io/github/v/release/gnim81/awi-scan)](https://github.com/gnim81/awi-scan/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -10,12 +11,8 @@ Agentic Workflow Injection happens when untrusted GitHub text, such as a pull re
 
 `awi-scan` runs locally and offline. It does not send workflow contents to an external service.
 
-The npm package name is reserved for publication, but it is not yet published to npm. Until npm publication is complete, use the GitHub Action or clone the repository and run the local CLI:
-
 ```bash
-npm install
-npm run build
-node dist/cli.js examples --format human --fail-on none
+npx awi-scan --format human
 ```
 
 ## Example Finding
@@ -66,14 +63,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: gnim81/awi-scan@v0.1.2
+      - uses: gnim81/awi-scan@v0.1.3
         with:
           fail-on: high
 ```
 
 ## CLI
-
-After npm publication:
 
 ```bash
 npx awi-scan --format human
