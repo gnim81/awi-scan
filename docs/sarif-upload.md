@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: gnim81/awi-scan@v0.1.3
+      - uses: gnim81/awi-scan@v0.1.4
         with:
           format: sarif
           output: awi-scan.sarif

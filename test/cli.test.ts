@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { promisify } from "node:util";
+import packageJson from "../package.json" with { type: "json" };
 import { beforeAll, describe, expect, it } from "vitest";
 
 const execFileAsync = promisify(execFile);
@@ -14,7 +15,7 @@ describe("cli", () => {
 
   it("prints version", async () => {
     const { stdout } = await execFileAsync("node", ["dist/cli.js", "--version"]);
-    expect(stdout).toContain("0.1.0");
+    expect(stdout).toContain(packageJson.version);
   });
 
   it("returns exit code 1 when fail threshold is met", async () => {

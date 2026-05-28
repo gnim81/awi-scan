@@ -1,4 +1,6 @@
-export const version = "0.1.0";
+import packageJson from "../package.json" with { type: "json" };
+
+export const version = packageJson.version;
 
 export * from "./analyzer.js";
 export * from "./config.js";
