@@ -1,13 +1,13 @@
 {
   "name": "awi-scan",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Detect Agentic Workflow Injection risks in GitHub Actions workflows.",
   "type": "module",
   "license": "MIT",
   "author": "awi-scan contributors",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gnim81/awi-scan.git"
+    "url": "git+https://github.com/gnim81/awi-scan.git"
   },
   "homepage": "https://github.com/gnim81/awi-scan#readme",
   "bugs": {
@@ -22,7 +22,7 @@
     "sarif"
   ],
   "bin": {
-    "awi-scan": "./dist/cli.js"
+    "awi-scan": "dist/cli.js"
   },
   "exports": {
     ".": {

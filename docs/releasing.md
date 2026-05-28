@@ -11,4 +11,4 @@
 9. Create a GitHub release with the README example and the main AWI threat model.
 10. Publish to npm only when `npm whoami` succeeds.
 
-Current release target: `v0.1.1`.
+Current release target: `v0.1.2`.

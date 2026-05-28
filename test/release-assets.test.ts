@@ -65,8 +65,18 @@ describe("release assets", () => {
     const readme = await readFile("README.md", "utf8");
     const packageJson = JSON.parse(await readFile("package.json", "utf8")) as { version: string };
 
-    expect(packageJson.version).toBe("0.1.1");
-    expect(readme).toContain("gnim81/awi-scan@v0.1.1");
+    expect(packageJson.version).toBe("0.1.2");
+    expect(readme).toContain("gnim81/awi-scan@v0.1.2");
     expect(readme).toContain("not yet published to npm");
+  });
+
+  it("uses npm-normalized package metadata for publishing", async () => {
+    const packageJson = JSON.parse(await readFile("package.json", "utf8")) as {
+      repository: { url: string };
+      bin: Record<string, string>;
+    };
+
+    expect(packageJson.repository.url).toBe("git+https://github.com/gnim81/awi-scan.git");
+    expect(packageJson.bin["awi-scan"]).toBe("dist/cli.js");
   });
 });

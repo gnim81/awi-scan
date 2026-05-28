@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: gnim81/awi-scan@v0.1.1
+      - uses: gnim81/awi-scan@v0.1.2
         with:
           fail-on: high
 ```
