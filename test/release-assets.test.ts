@@ -25,10 +25,19 @@ describe("release assets", () => {
   });
 
   it("ships public security and contribution guidance", async () => {
-    const files = await Promise.all([readFile("SECURITY.md", "utf8"), readFile("CONTRIBUTING.md", "utf8")]);
+    const files = await Promise.all([
+      readFile("SECURITY.md", "utf8"),
+      readFile("CONTRIBUTING.md", "utf8"),
+      readFile("docs/agent-actions.md", "utf8"),
+      readFile("docs/false-positives.md", "utf8"),
+      readFile("docs/sarif-upload.md", "utf8")
+    ]);
 
     expect(files.join("\n")).toContain("Agentic Workflow Injection");
     expect(files.join("\n")).toContain("npm run check");
+    expect(files.join("\n")).toContain("Claude Code");
+    expect(files.join("\n")).toContain("false positive");
+    expect(files.join("\n")).toContain("github/codeql-action/upload-sarif");
   });
 
   it("includes linked public documentation in the npm package without internal docs", async () => {
@@ -41,11 +50,23 @@ describe("release assets", () => {
         "docs/releasing.md",
         "docs/rules.md",
         "docs/threat-model.md",
+        "docs/agent-actions.md",
+        "docs/false-positives.md",
+        "docs/sarif-upload.md",
         "SECURITY.md",
         "CONTRIBUTING.md"
       ])
     );
     expect(packageJson.files).not.toContain("docs");
     expect(packageJson.files.join("\n")).not.toContain("docs/superpowers");
+  });
+
+  it("points public usage examples at the next launch-ready release", async () => {
+    const readme = await readFile("README.md", "utf8");
+    const packageJson = JSON.parse(await readFile("package.json", "utf8")) as { version: string };
+
+    expect(packageJson.version).toBe("0.1.1");
+    expect(readme).toContain("gnim81/awi-scan@v0.1.1");
+    expect(readme).toContain("not yet published to npm");
   });
 });

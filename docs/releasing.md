@@ -1,10 +1,14 @@
 # Releasing
 
-1. Run `npm run check`.
-2. Confirm `dist/cli.js` and `dist/action.js` exist.
-3. Update `CHANGELOG.md` when it exists.
-4. Tag the release.
-5. Publish to npm.
-6. Create a GitHub release with the README example and the main AWI threat model.
+1. Confirm `gh api user --jq .login` is `gnim81`.
+2. Run `npm run check`.
+3. Run `npm audit`.
+4. Run `npm pack --dry-run` and confirm `docs/superpowers/**` is not included.
+5. Run `node dist/cli.js examples --format human --fail-on none`.
+6. Confirm `dist/cli.js` and `dist/action.js` exist.
+7. Update `CHANGELOG.md` when it exists.
+8. Tag the release.
+9. Create a GitHub release with the README example and the main AWI threat model.
+10. Publish to npm only when `npm whoami` succeeds.
 
-The first release target is `v0.1.0`.
+Current release target: `v0.1.1`.

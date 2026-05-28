@@ -8,11 +8,15 @@ Detect Agentic Workflow Injection risks in GitHub Actions workflows.
 
 Agentic Workflow Injection happens when untrusted GitHub text, such as a pull request body or issue comment, is sent to an AI coding agent that runs with repository privileges. `awi-scan` looks for that source-to-agent-to-privilege path before the agent runs.
 
-```bash
-npx awi-scan
-```
-
 `awi-scan` runs locally and offline. It does not send workflow contents to an external service.
+
+The npm package name is reserved for publication, but it is not yet published to npm. Until npm publication is complete, use the GitHub Action or clone the repository and run the local CLI:
+
+```bash
+npm install
+npm run build
+node dist/cli.js examples --format human --fail-on none
+```
 
 ## Example Finding
 
@@ -62,12 +66,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: gnim81/awi-scan@v0.1.0
+      - uses: gnim81/awi-scan@v0.1.1
         with:
           fail-on: high
 ```
 
 ## CLI
+
+After npm publication:
 
 ```bash
 npx awi-scan --format human
@@ -89,6 +95,9 @@ See [Threat Model](docs/threat-model.md) and [Rules](docs/rules.md) for details.
 
 ## Project
 
+- Supported agent patterns: [docs/agent-actions.md](docs/agent-actions.md)
+- SARIF upload: [docs/sarif-upload.md](docs/sarif-upload.md)
+- False positives: [docs/false-positives.md](docs/false-positives.md)
 - Security reports: [SECURITY.md](SECURITY.md)
 - Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
 - Examples: [docs/examples.md](docs/examples.md)
