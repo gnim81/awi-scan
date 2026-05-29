@@ -1,0 +1,12 @@
+name: safe aider trusted prompt
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  agent:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask Aider to inspect trusted code
+        run: |
+          aider --message "Review the checked-in code for maintainability notes."

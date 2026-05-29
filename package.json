@@ -38,6 +38,7 @@
     "docs/releasing.md",
     "docs/rules.md",
     "docs/threat-model.md",
+    "docs/pull-request-target.md",
     "docs/agent-actions.md",
     "docs/assets",
     "docs/false-positives.md",

@@ -104,6 +104,7 @@ See [Threat Model](docs/threat-model.md) and [Rules](docs/rules.md) for details.
 ## Project
 
 - Supported agent patterns: [docs/agent-actions.md](docs/agent-actions.md)
+- Safe `pull_request_target` patterns: [docs/pull-request-target.md](docs/pull-request-target.md)
 - SARIF upload: [docs/sarif-upload.md](docs/sarif-upload.md)
 - False positives: [docs/false-positives.md](docs/false-positives.md)
 - Security reports: [SECURITY.md](SECURITY.md)

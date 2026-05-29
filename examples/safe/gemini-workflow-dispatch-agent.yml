@@ -1,0 +1,12 @@
+name: safe gemini trusted prompt
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  agent:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask Gemini to summarize trusted release notes
+        run: |
+          gemini --prompt "Summarize the maintainer-authored release notes."

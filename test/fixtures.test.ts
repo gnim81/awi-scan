@@ -25,6 +25,30 @@ describe("example fixtures", () => {
     expect(result.findings[0]?.severity).toBe("critical");
   });
 
+  it("flags Gemini CLI when untrusted issue text reaches a privileged agent", async () => {
+    const result = await scan({
+      root: resolve("."),
+      paths: ["examples/vulnerable/gemini-issue-agent.yml"],
+      config: defaultConfig
+    });
+
+    expect(result.findings).toHaveLength(1);
+    expect(result.findings[0]?.ruleId).toBe("awi.untrusted-prompt-to-agent");
+    expect(result.findings[0]?.evidence.map((evidence) => evidence.label)).toContain("agent CLI");
+  });
+
+  it("flags Aider CLI when untrusted pull request text reaches a privileged agent", async () => {
+    const result = await scan({
+      root: resolve("."),
+      paths: ["examples/vulnerable/aider-pull-request-agent.yml"],
+      config: defaultConfig
+    });
+
+    expect(result.findings).toHaveLength(1);
+    expect(result.findings[0]?.ruleId).toBe("awi.untrusted-prompt-to-agent");
+    expect(result.findings[0]?.evidence.map((evidence) => evidence.label)).toContain("agent CLI");
+  });
+
   it("does not flag safe fixtures as high or critical", async () => {
     const result = await scan({
       root: resolve("."),
