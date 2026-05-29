@@ -39,6 +39,7 @@
     "docs/rules.md",
     "docs/threat-model.md",
     "docs/agent-actions.md",
+    "docs/assets",
     "docs/false-positives.md",
     "docs/sarif-upload.md",
     "README.md",

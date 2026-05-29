@@ -11,6 +11,8 @@ Agentic Workflow Injection happens when untrusted GitHub text, such as a pull re
 
 `awi-scan` runs locally and offline. It does not send workflow contents to an external service.
 
+![awi-scan terminal demo](docs/assets/terminal-demo.svg)
+
 ```bash
 npx awi-scan . --format human
 ```
