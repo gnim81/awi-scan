@@ -1,6 +1,6 @@
 {
   "name": "awi-scan",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Detect Agentic Workflow Injection risks in GitHub Actions workflows.",
   "type": "module",
   "license": "MIT",

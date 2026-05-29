@@ -93,6 +93,14 @@ export interface DetectedSink {
   jobId: string;
 }
 
+export interface DetectedCheckout {
+  label: string;
+  value: string;
+  location: Location;
+  stepId?: string;
+  jobId: string;
+}
+
 export interface DetectedPrivilege {
   label: string;
   value: string;

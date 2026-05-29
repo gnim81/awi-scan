@@ -15,6 +15,13 @@ export const ruleCatalog = [
     remediation:
       "Do not execute or evaluate agent-generated text. Require a human review boundary before shell execution, GitHub API mutation, or privileged artifact handoff.",
     references: ["https://arxiv.org/abs/2605.07135"]
+  },
+  {
+    id: "awi.untrusted-checkout-to-agent",
+    title: "Untrusted pull request code is checked out before an agent runs",
+    remediation:
+      "Do not run privileged agents on code checked out from an untrusted pull request head. Use the base repository checkout, require maintainer approval, or move the agent to a read-only pull_request workflow.",
+    references: ["https://github.com/anthropics/claude-code-action/blob/main/docs/security.md"]
   }
 ] as const;
 

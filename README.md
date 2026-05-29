@@ -12,7 +12,17 @@ Agentic Workflow Injection happens when untrusted GitHub text, such as a pull re
 `awi-scan` runs locally and offline. It does not send workflow contents to an external service.
 
 ```bash
-npx awi-scan --format human
+npx awi-scan . --format human
+```
+
+```text
+awi-scan: 3 finding(s) in 5 workflow file(s)
+
+critical awi.untrusted-prompt-to-agent examples/vulnerable/pull-request-target-agent.yml:1:1
+  Untrusted GitHub event content can reach an AI agent running with workflow privileges.
+
+critical awi.untrusted-checkout-to-agent examples/vulnerable/pull-request-target-checkout-agent.yml:1:1
+  An AI agent can run after untrusted pull request code is checked out in a privileged workflow.
 ```
 
 ## Example Finding
@@ -63,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: gnim81/awi-scan@v0.1.4
+      - uses: gnim81/awi-scan@v0.2.0
         with:
           fail-on: high
 ```
@@ -84,6 +94,7 @@ npx awi-scan explain awi.untrusted-prompt-to-agent
 - Untrusted issue, PR, comment, review, or discussion text.
 - Event payload reads through `GITHUB_EVENT_PATH`, `gh`, `curl`, or GitHub API calls.
 - Agent actions and agent CLI invocations.
+- Untrusted pull request head checkouts before agent execution.
 - Dangerous contexts such as `pull_request_target`, write permissions, secrets, OIDC, and self-hosted runners.
 
 See [Threat Model](docs/threat-model.md) and [Rules](docs/rules.md) for details.

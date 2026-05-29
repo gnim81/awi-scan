@@ -19,3 +19,17 @@ Recommended fix: do not send raw untrusted text directly to privileged agents. U
 ## awi.agent-output-to-privileged-step
 
 Reserved for follow-up flow analysis where agent output is executed or sent to privileged APIs. The first release documents the rule id and remediation so SARIF consumers have a stable rule catalog.
+
+## awi.untrusted-checkout-to-agent
+
+Flags `pull_request_target` workflows where `actions/checkout` checks out an untrusted pull request head before an AI agent runs.
+
+Risky checkout indicators include:
+
+- `repository: ${{ github.event.pull_request.head.repo.full_name }}`
+- `ref: ${{ github.event.pull_request.head.sha }}`
+- `ref: ${{ github.event.pull_request.head.ref }}`
+
+This pattern can let attacker-controlled code influence files, prompts, configuration, or tools consumed by a privileged agent.
+
+Recommended fix: do not run privileged agents on untrusted pull request head code. Use the base repository checkout, require maintainer approval, or move agent execution to a read-only `pull_request` workflow.

@@ -13,4 +13,4 @@
 11. Verify `npm view awi-scan version`.
 12. Verify `npx awi-scan --help`.
 
-Current release target: `v0.1.4`.
+Current release target: `v0.2.0`.

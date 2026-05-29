@@ -56,4 +56,37 @@ describe("analyzer", () => {
     const result = await scan({ root, paths: ["."], config: defaultConfig });
     expect(result.findings.filter((finding) => finding.severity === "high" || finding.severity === "critical")).toHaveLength(0);
   });
+
+  it("reports critical AWI when pull_request_target checks out untrusted PR head before an agent runs", async () => {
+    const root = await mkdtemp(join(tmpdir(), "awi-analyzer-checkout-"));
+    await mkdir(join(root, ".github", "workflows"), { recursive: true });
+    await writeFile(
+      join(root, ".github", "workflows", "checkout-head.yml"),
+      [
+        "name: checkout head",
+        "on:",
+        "  pull_request_target:",
+        "permissions:",
+        "  contents: write",
+        "jobs:",
+        "  agent:",
+        "    runs-on: ubuntu-latest",
+        "    steps:",
+        "      - uses: actions/checkout@v4",
+        "        with:",
+        "          repository: ${{ github.event.pull_request.head.repo.full_name }}",
+        "          ref: ${{ github.event.pull_request.head.sha }}",
+        "      - uses: anthropics/claude-code-action@v1",
+        "        with:",
+        "          prompt: Review this pull request"
+      ].join("\n")
+    );
+
+    const result = await scan({ root, paths: ["."], config: defaultConfig });
+
+    expect(result.findings).toHaveLength(1);
+    expect(result.findings[0]?.ruleId).toBe("awi.untrusted-checkout-to-agent");
+    expect(result.findings[0]?.severity).toBe("critical");
+    expect(result.findings[0]?.evidence.map((evidence) => evidence.label)).toContain("untrusted pull request checkout");
+  });
 });

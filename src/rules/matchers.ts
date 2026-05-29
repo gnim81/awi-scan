@@ -4,7 +4,7 @@ import {
   promptInputNames,
   untrustedExpressionPatterns
 } from "./catalog.js";
-import type { DetectedPrivilege, DetectedSink, DetectedSource, Workflow, WorkflowStep } from "../types.js";
+import type { DetectedCheckout, DetectedPrivilege, DetectedSink, DetectedSource, Workflow, WorkflowStep } from "../types.js";
 
 function values(step: WorkflowStep): string[] {
   return [step.uses ?? "", step.run ?? "", ...Object.values(step.with), ...Object.values(step.env)].filter(Boolean);
@@ -74,6 +74,29 @@ export function detectSinks(workflow: Workflow, customAgentActions: string[]): D
     }
   }
   return sinks;
+}
+
+export function detectUntrustedCheckouts(workflow: Workflow): DetectedCheckout[] {
+  const checkouts: DetectedCheckout[] = [];
+  for (const job of workflow.jobs) {
+    for (const step of job.steps) {
+      if (!step.uses || !/^actions\/checkout@/i.test(step.uses)) {
+        continue;
+      }
+      const checkoutValues = [step.with.repository ?? "", step.with.ref ?? ""].join("\n");
+      if (!/github\.event\.pull_request\.head\.(repo\.full_name|sha|ref)/i.test(checkoutValues)) {
+        continue;
+      }
+      const base = {
+        label: "untrusted pull request checkout",
+        value: checkoutValues,
+        location: step.location,
+        jobId: job.id
+      };
+      checkouts.push(step.id ? { ...base, stepId: step.id } : base);
+    }
+  }
+  return checkouts;
 }
 
 export function detectPrivileges(workflow: Workflow): DetectedPrivilege[] {

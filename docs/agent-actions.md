@@ -18,6 +18,8 @@ Current matcher coverage includes common naming patterns for:
 
 The scanner also checks prompt-like inputs on recognized agent actions, including `prompt`, `instruction`, `instructions`, `task`, `message`, `body`, `query`, and `input`.
 
+`awi-scan` also detects a related checkout risk: a `pull_request_target` workflow that checks out the untrusted pull request head before running an agent. In that case, attacker-controlled code can influence files, prompts, configuration, or tools used by the agent even when the prompt text itself is static.
+
 ## What Makes A Finding
 
 An agent action or CLI is only one ingredient. `awi-scan` reports the high-risk pattern when it can also see:

@@ -132,6 +132,12 @@ var ruleCatalog = [
     title: "Agent output flows into a privileged follow-up step",
     remediation: "Do not execute or evaluate agent-generated text. Require a human review boundary before shell execution, GitHub API mutation, or privileged artifact handoff.",
     references: ["https://arxiv.org/abs/2605.07135"]
+  },
+  {
+    id: "awi.untrusted-checkout-to-agent",
+    title: "Untrusted pull request code is checked out before an agent runs",
+    remediation: "Do not run privileged agents on code checked out from an untrusted pull request head. Use the base repository checkout, require maintainer approval, or move the agent to a read-only pull_request workflow.",
+    references: ["https://github.com/anthropics/claude-code-action/blob/main/docs/security.md"]
   }
 ];
 var defaultAgentActionPatterns = [
@@ -226,6 +232,28 @@ function detectSinks(workflow, customAgentActions) {
   }
   return sinks;
 }
+function detectUntrustedCheckouts(workflow) {
+  const checkouts = [];
+  for (const job of workflow.jobs) {
+    for (const step of job.steps) {
+      if (!step.uses || !/^actions\/checkout@/i.test(step.uses)) {
+        continue;
+      }
+      const checkoutValues = [step.with.repository ?? "", step.with.ref ?? ""].join("\n");
+      if (!/github\.event\.pull_request\.head\.(repo\.full_name|sha|ref)/i.test(checkoutValues)) {
+        continue;
+      }
+      const base = {
+        label: "untrusted pull request checkout",
+        value: checkoutValues,
+        location: step.location,
+        jobId: job.id
+      };
+      checkouts.push(step.id ? { ...base, stepId: step.id } : base);
+    }
+  }
+  return checkouts;
+}
 function detectPrivileges(workflow) {
   const privileges = [];
   if (workflow.triggers.includes("pull_request_target")) {
@@ -307,44 +335,42 @@ function analyzeWorkflow(workflow, customAgentActions) {
   const sources = detectSources(workflow);
   const sinks = detectSinks(workflow, customAgentActions);
   const privileges = detectPrivileges(workflow);
-  if (sources.length === 0 || sinks.length === 0) {
-    return [];
-  }
-  const rule = ruleCatalog[0];
+  const findings = [];
   const hasPullRequestTarget = privileges.some((privilege) => privilege.label === "pull_request_target");
   const hasWritePermission = privileges.some((privilege) => /write|write-all/i.test(privilege.label));
   const hasSecrets = privileges.some((privilege) => /secret/i.test(privilege.label));
   const hasSelfHostedRunner = privileges.some((privilege) => privilege.label === "self-hosted runner");
-  const { severity, confidence } = classifySeverity({
-    hasCompleteFlow: true,
-    hasPullRequestTarget,
-    hasWritePermission,
-    hasSecrets,
-    hasSelfHostedRunner
-  });
-  const sink = sinks[0];
-  const evidence = [
-    ...sources.map((source) => ({
-      kind: "source",
-      label: source.label,
-      detail: source.value,
-      location: source.location
-    })),
-    {
-      kind: "sink",
-      label: sink.label,
-      detail: sink.value,
-      location: sink.location
-    },
-    ...privileges.map((privilege) => ({
-      kind: "privilege",
-      label: privilege.label,
-      detail: privilege.value,
-      location: privilege.location
-    }))
-  ];
-  return [
-    {
+  if (sources.length > 0 && sinks.length > 0) {
+    const rule = ruleCatalog[0];
+    const { severity, confidence } = classifySeverity({
+      hasCompleteFlow: true,
+      hasPullRequestTarget,
+      hasWritePermission,
+      hasSecrets,
+      hasSelfHostedRunner
+    });
+    const sink = sinks[0];
+    const evidence = [
+      ...sources.map((source) => ({
+        kind: "source",
+        label: source.label,
+        detail: source.value,
+        location: source.location
+      })),
+      {
+        kind: "sink",
+        label: sink.label,
+        detail: sink.value,
+        location: sink.location
+      },
+      ...privileges.map((privilege) => ({
+        kind: "privilege",
+        label: privilege.label,
+        detail: privilege.value,
+        location: privilege.location
+      }))
+    ];
+    findings.push({
       ruleId: rule.id,
       title: rule.title,
       severity,
@@ -354,8 +380,53 @@ function analyzeWorkflow(workflow, customAgentActions) {
       message: "Untrusted GitHub event content can reach an AI agent running with workflow privileges.",
       remediation: rule.remediation,
       references: [...rule.references]
-    }
-  ];
+    });
+  }
+  const untrustedCheckouts = detectUntrustedCheckouts(workflow);
+  if (untrustedCheckouts.length > 0 && sinks.length > 0) {
+    const rule = ruleCatalog.find((candidate) => candidate.id === "awi.untrusted-checkout-to-agent");
+    const { severity, confidence } = classifySeverity({
+      hasCompleteFlow: true,
+      hasPullRequestTarget,
+      hasWritePermission,
+      hasSecrets,
+      hasSelfHostedRunner
+    });
+    const checkout = untrustedCheckouts[0];
+    const sink = sinks[0];
+    const evidence = [
+      {
+        kind: "source",
+        label: checkout.label,
+        detail: checkout.value,
+        location: checkout.location
+      },
+      {
+        kind: "sink",
+        label: sink.label,
+        detail: sink.value,
+        location: sink.location
+      },
+      ...privileges.map((privilege) => ({
+        kind: "privilege",
+        label: privilege.label,
+        detail: privilege.value,
+        location: privilege.location
+      }))
+    ];
+    findings.push({
+      ruleId: rule.id,
+      title: rule.title,
+      severity,
+      confidence,
+      location: sink.location,
+      evidence,
+      message: "An AI agent can run after untrusted pull request code is checked out in a privileged workflow.",
+      remediation: rule.remediation,
+      references: [...rule.references]
+    });
+  }
+  return findings;
 }
 
 // src/config.ts
