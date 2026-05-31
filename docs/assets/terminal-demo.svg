@@ -25,8 +25,8 @@
     <text x="95" y="115" fill="#e4edf5">npx awi-scan examples --format human</text>
 
     <text x="72" y="157" fill="#e4edf5">awi-scan: </text>
-    <text x="178" y="157" fill="#f7c948">3 finding(s)</text>
-    <text x="302" y="157" fill="#e4edf5"> in 5 workflow file(s)</text>
+    <text x="178" y="157" fill="#f7c948">5 finding(s)</text>
+    <text x="302" y="157" fill="#e4edf5"> in 9 workflow file(s)</text>
 
     <rect x="72" y="186" width="86" height="24" rx="4" fill="#c2410c"/>
     <text x="84" y="204" fill="#fff7ed" font-size="14" font-weight="700">critical</text>

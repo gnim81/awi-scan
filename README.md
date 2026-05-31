@@ -18,13 +18,16 @@ npx awi-scan . --format human
 ```
 
 ```text
-awi-scan: 3 finding(s) in 5 workflow file(s)
+awi-scan: 5 finding(s) in 9 workflow file(s)
 
 critical awi.untrusted-prompt-to-agent examples/vulnerable/pull-request-target-agent.yml:1:1
   Untrusted GitHub event content can reach an AI agent running with workflow privileges.
 
 critical awi.untrusted-checkout-to-agent examples/vulnerable/pull-request-target-checkout-agent.yml:1:1
   An AI agent can run after untrusted pull request code is checked out in a privileged workflow.
+
+high awi.untrusted-prompt-to-agent examples/vulnerable/gemini-issue-agent.yml:1:1
+  Untrusted GitHub event content can reach an AI agent running with workflow privileges.
 ```
 
 ## Example Finding

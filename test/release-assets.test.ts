@@ -80,4 +80,18 @@ describe("release assets", () => {
     expect(packageJson.repository.url).toBe("git+https://github.com/gnim81/awi-scan.git");
     expect(packageJson.bin["awi-scan"]).toBe("dist/cli.js");
   });
+
+  it("keeps README and terminal demo example counts in sync with fixtures", async () => {
+    const files = await Promise.all([
+      readFile("README.md", "utf8"),
+      readFile("docs/assets/terminal-demo.svg", "utf8")
+    ]);
+
+    for (const file of files) {
+      expect(file).toContain("5 finding(s)");
+      expect(file).toContain("9 workflow file(s)");
+      expect(file).not.toContain("3 finding(s)");
+      expect(file).not.toContain("5 workflow file(s)");
+    }
+  });
 });
